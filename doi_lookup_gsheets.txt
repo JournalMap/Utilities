@@ -1,0 +1,14 @@
+/**
+ * Google Sheets Functions for processing citation data for JournalMap
+ */
+
+function getDOI(journal,vol,iss,pg,date) {
+  Utilities.sleep(1000);
+  var source = journal.split(" ").join("%20");
+  var response = UrlFetchApp.fetch("http://www.crossref.org/openurl?pid=jakal14@gmail.com&title="+source+"&volume="+vol+"&issue="+iss+"&spage="+pg+"&date="+date+"&redirect=false");
+  var xml = response.getContentText();
+  var document = Xml.parse(xml, true);
+  var root = document.crossref_result;
+  var doi = root.getElement('query_result').getElement('body').getElement('query').getElement('doi').getText();
+  return doi;
+};
